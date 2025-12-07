@@ -628,6 +628,8 @@ int TWFunc::tw_reboot(RebootCommand command)
 	switch (command) {
 		case rb_current:
 		case rb_system:
+			// Clear bootloader message in misc partition to prevent boot loop
+			Clear_Bootloader_Message();
 			Update_Intent_File("s");
 			sync();
 			check_and_run_script("/system/bin/rebootsystem.sh", "reboot system");
