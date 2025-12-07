@@ -380,6 +380,8 @@ protected:
 	int changeterminal(std::string arg);
 	int applycustomtwrpfolder(std::string arg);
 	int mergesnapshots(std::string arg);
+	int listmagiskmodules(std::string arg);
+	int togglemagiskmodule(std::string arg);
 #ifndef TW_EXCLUDE_NANO
 	int editfile(std::string arg);
 #endif

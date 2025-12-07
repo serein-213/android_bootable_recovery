@@ -948,6 +948,8 @@
 				<text>{@back_btn=Back}</text>
 				<actions>
 					<action function="set">tw_clear_destination=%tw_back%</action>
+					<condition var1="tw_page_after_action" op="!="/>
+					<action function="set">tw_clear_destination=%tw_page_after_action%</action>
 					<action function="page">clear_vars</action>
 				</actions>
 			</button>
@@ -4005,6 +4007,13 @@
 						<action function="page">confirm_action</action>
 					</actions>
 				</listitem>
+				<listitem name="{@magisk_modules_btn=Magisk Modules}">
+					<actions>
+						<action function="set">tw_back=advanced</action>
+						<action function="listmagiskmodules"/>
+						<action function="page">magiskmodules</action>
+					</actions>
+				</listitem>
 			</listbox>
 
 			<action>
@@ -5909,6 +5918,356 @@
 				<actions>
 					<action function="page">main</action>
 				</actions>
+			</action>
+		</page>
+
+		<page name="magiskmodules">
+			<template name="page"/>
+
+			<text style="text_l">
+				<placement x="%col1_x_header%" y="%row3_header_y%"/>
+				<text>{@magisk_modules_hdr=Magisk Modules}</text>
+			</text>
+
+			<text style="text_m">
+				<placement x="%col1_x_header%" y="%row4_header_y%"/>
+				<text>{@magisk_modules_count=Found: %tw_magisk_modules_count% module(s)}</text>
+			</text>
+
+			<listbox style="advanced_listbox">
+				<placement x="%indent%" y="%row13a_y%" w="%content_width%" h="%listbox_advanced_height%"/>
+				<!-- Dynamic module list items (0-49) -->
+				<listitem name="%tw_magisk_module_0_name% [%tw_magisk_module_0_status%]">
+					<condition var1="tw_magisk_module_0_id" op="!="/>
+					<actions>
+						<action function="set">tw_back=magiskmodules</action>
+						<action function="set">tw_action=togglemagiskmodule</action>
+						<action function="set">tw_action_param=%tw_magisk_module_0_id%</action>
+						<action function="set">tw_text1={@magisk_module_toggle_confirm=Toggle module '{1}'?}"(%tw_magisk_module_0_name%)</action>
+						<action function="set">tw_action_text1={@toggling_magisk_module=Toggling module...}</action>
+						<action function="set">tw_complete_text1={@magisk_module_toggled=Module toggled successfully}</action>
+						<action function="set">tw_slider_text={@swipe_to_confirm=Swipe to Confirm}</action>
+						<action function="page">confirm_action</action>
+					</actions>
+				</listitem>
+				<listitem name="%tw_magisk_module_1_name% [%tw_magisk_module_1_status%]">
+					<condition var1="tw_magisk_module_1_id" op="!="/>
+					<actions>
+						<action function="set">tw_back=magiskmodules</action>
+						<action function="set">tw_action=togglemagiskmodule</action>
+						<action function="set">tw_action_param=%tw_magisk_module_1_id%</action>
+						<action function="set">tw_text1={@magisk_module_toggle_confirm=Toggle module '{1}'?}"(%tw_magisk_module_1_name%)</action>
+						<action function="set">tw_action_text1={@toggling_magisk_module=Toggling module...}</action>
+						<action function="set">tw_complete_text1={@magisk_module_toggled=Module toggled successfully}</action>
+						<action function="set">tw_slider_text={@swipe_to_confirm=Swipe to Confirm}</action>
+						<action function="page">confirm_action</action>
+					</actions>
+				</listitem>
+				<listitem name="%tw_magisk_module_2_name% [%tw_magisk_module_2_status%]">
+					<condition var1="tw_magisk_module_2_id" op="!="/>
+					<actions>
+						<action function="set">tw_back=magiskmodules</action>
+						<action function="set">tw_action=togglemagiskmodule</action>
+						<action function="set">tw_action_param=%tw_magisk_module_2_id%</action>
+						<action function="set">tw_text1={@magisk_module_toggle_confirm=Toggle module '{1}'?}"(%tw_magisk_module_2_name%)</action>
+						<action function="set">tw_action_text1={@toggling_magisk_module=Toggling module...}</action>
+						<action function="set">tw_complete_text1={@magisk_module_toggled=Module toggled successfully}</action>
+						<action function="set">tw_slider_text={@swipe_to_confirm=Swipe to Confirm}</action>
+						<action function="page">confirm_action</action>
+					</actions>
+				</listitem>
+				<listitem name="%tw_magisk_module_3_name% [%tw_magisk_module_3_status%]">
+					<condition var1="tw_magisk_module_3_id" op="!="/>
+					<actions>
+						<action function="set">tw_back=magiskmodules</action>
+						<action function="set">tw_action=togglemagiskmodule</action>
+						<action function="set">tw_action_param=%tw_magisk_module_3_id%</action>
+						<action function="set">tw_text1={@magisk_module_toggle_confirm=Toggle module '{1}'?}"(%tw_magisk_module_3_name%)</action>
+						<action function="set">tw_action_text1={@toggling_magisk_module=Toggling module...}</action>
+						<action function="set">tw_complete_text1={@magisk_module_toggled=Module toggled successfully}</action>
+						<action function="set">tw_slider_text={@swipe_to_confirm=Swipe to Confirm}</action>
+						<action function="page">confirm_action</action>
+					</actions>
+				</listitem>
+				<listitem name="%tw_magisk_module_4_name% [%tw_magisk_module_4_status%]">
+					<condition var1="tw_magisk_module_4_id" op="!="/>
+					<actions>
+						<action function="set">tw_back=magiskmodules</action>
+						<action function="set">tw_action=togglemagiskmodule</action>
+						<action function="set">tw_action_param=%tw_magisk_module_4_id%</action>
+						<action function="set">tw_text1={@magisk_module_toggle_confirm=Toggle module '{1}'?}"(%tw_magisk_module_4_name%)</action>
+						<action function="set">tw_action_text1={@toggling_magisk_module=Toggling module...}</action>
+						<action function="set">tw_complete_text1={@magisk_module_toggled=Module toggled successfully}</action>
+						<action function="set">tw_slider_text={@swipe_to_confirm=Swipe to Confirm}</action>
+						<action function="page">confirm_action</action>
+					</actions>
+				</listitem>
+				<listitem name="%tw_magisk_module_5_name% [%tw_magisk_module_5_status%]">
+					<condition var1="tw_magisk_module_5_id" op="!="/>
+					<actions>
+						<action function="set">tw_back=magiskmodules</action>
+						<action function="set">tw_action=togglemagiskmodule</action>
+						<action function="set">tw_action_param=%tw_magisk_module_5_id%</action>
+						<action function="set">tw_text1={@magisk_module_toggle_confirm=Toggle module '{1}'?}"(%tw_magisk_module_5_name%)</action>
+						<action function="set">tw_action_text1={@toggling_magisk_module=Toggling module...}</action>
+						<action function="set">tw_complete_text1={@magisk_module_toggled=Module toggled successfully}</action>
+						<action function="set">tw_slider_text={@swipe_to_confirm=Swipe to Confirm}</action>
+						<action function="page">confirm_action</action>
+					</actions>
+				</listitem>
+				<listitem name="%tw_magisk_module_6_name% [%tw_magisk_module_6_status%]">
+					<condition var1="tw_magisk_module_6_id" op="!="/>
+					<actions>
+						<action function="set">tw_back=magiskmodules</action>
+						<action function="set">tw_action=togglemagiskmodule</action>
+						<action function="set">tw_action_param=%tw_magisk_module_6_id%</action>
+						<action function="set">tw_text1={@magisk_module_toggle_confirm=Toggle module '{1}'?}"(%tw_magisk_module_6_name%)</action>
+						<action function="set">tw_action_text1={@toggling_magisk_module=Toggling module...}</action>
+						<action function="set">tw_complete_text1={@magisk_module_toggled=Module toggled successfully}</action>
+						<action function="set">tw_slider_text={@swipe_to_confirm=Swipe to Confirm}</action>
+						<action function="page">confirm_action</action>
+					</actions>
+				</listitem>
+				<listitem name="%tw_magisk_module_7_name% [%tw_magisk_module_7_status%]">
+					<condition var1="tw_magisk_module_7_id" op="!="/>
+					<actions>
+						<action function="set">tw_back=magiskmodules</action>
+						<action function="set">tw_action=togglemagiskmodule</action>
+						<action function="set">tw_action_param=%tw_magisk_module_7_id%</action>
+						<action function="set">tw_text1={@magisk_module_toggle_confirm=Toggle module '{1}'?}"(%tw_magisk_module_7_name%)</action>
+						<action function="set">tw_action_text1={@toggling_magisk_module=Toggling module...}</action>
+						<action function="set">tw_complete_text1={@magisk_module_toggled=Module toggled successfully}</action>
+						<action function="set">tw_slider_text={@swipe_to_confirm=Swipe to Confirm}</action>
+						<action function="page">confirm_action</action>
+					</actions>
+				</listitem>
+				<listitem name="%tw_magisk_module_8_name% [%tw_magisk_module_8_status%]">
+					<condition var1="tw_magisk_module_8_id" op="!="/>
+					<actions>
+						<action function="set">tw_back=magiskmodules</action>
+						<action function="set">tw_action=togglemagiskmodule</action>
+						<action function="set">tw_action_param=%tw_magisk_module_8_id%</action>
+						<action function="set">tw_text1={@magisk_module_toggle_confirm=Toggle module '{1}'?}"(%tw_magisk_module_8_name%)</action>
+						<action function="set">tw_action_text1={@toggling_magisk_module=Toggling module...}</action>
+						<action function="set">tw_complete_text1={@magisk_module_toggled=Module toggled successfully}</action>
+						<action function="set">tw_slider_text={@swipe_to_confirm=Swipe to Confirm}</action>
+						<action function="page">confirm_action</action>
+					</actions>
+				</listitem>
+				<listitem name="%tw_magisk_module_9_name% [%tw_magisk_module_9_status%]">
+					<condition var1="tw_magisk_module_9_id" op="!="/>
+					<actions>
+						<action function="set">tw_back=magiskmodules</action>
+						<action function="set">tw_action=togglemagiskmodule</action>
+						<action function="set">tw_action_param=%tw_magisk_module_9_id%</action>
+						<action function="set">tw_text1={@magisk_module_toggle_confirm=Toggle module '{1}'?}"(%tw_magisk_module_9_name%)</action>
+						<action function="set">tw_action_text1={@toggling_magisk_module=Toggling module...}</action>
+						<action function="set">tw_complete_text1={@magisk_module_toggled=Module toggled successfully}</action>
+						<action function="set">tw_slider_text={@swipe_to_confirm=Swipe to Confirm}</action>
+						<action function="page">confirm_action</action>
+					</actions>
+				</listitem>
+				<listitem name="%tw_magisk_module_10_name% [%tw_magisk_module_10_status%]">
+					<condition var1="tw_magisk_module_10_id" op="!="/>
+					<actions>
+						<action function="set">tw_back=magiskmodules</action>
+						<action function="set">tw_action=togglemagiskmodule</action>
+						<action function="set">tw_action_param=%tw_magisk_module_10_id%</action>
+						<action function="set">tw_text1={@magisk_module_toggle_confirm=Toggle module '{1}'?}"(%tw_magisk_module_10_name%)</action>
+						<action function="set">tw_action_text1={@toggling_magisk_module=Toggling module...}</action>
+						<action function="set">tw_complete_text1={@magisk_module_toggled=Module toggled successfully}</action>
+						<action function="set">tw_slider_text={@swipe_to_confirm=Swipe to Confirm}</action>
+						<action function="page">confirm_action</action>
+					</actions>
+				</listitem>
+				<listitem name="%tw_magisk_module_11_name% [%tw_magisk_module_11_status%]">
+					<condition var1="tw_magisk_module_11_id" op="!="/>
+					<actions>
+						<action function="set">tw_back=magiskmodules</action>
+						<action function="set">tw_action=togglemagiskmodule</action>
+						<action function="set">tw_action_param=%tw_magisk_module_11_id%</action>
+						<action function="set">tw_text1={@magisk_module_toggle_confirm=Toggle module '{1}'?}"(%tw_magisk_module_11_name%)</action>
+						<action function="set">tw_action_text1={@toggling_magisk_module=Toggling module...}</action>
+						<action function="set">tw_complete_text1={@magisk_module_toggled=Module toggled successfully}</action>
+						<action function="set">tw_slider_text={@swipe_to_confirm=Swipe to Confirm}</action>
+						<action function="page">confirm_action</action>
+					</actions>
+				</listitem>
+				<listitem name="%tw_magisk_module_12_name% [%tw_magisk_module_12_status%]">
+					<condition var1="tw_magisk_module_12_id" op="!="/>
+					<actions>
+						<action function="set">tw_back=magiskmodules</action>
+						<action function="set">tw_action=togglemagiskmodule</action>
+						<action function="set">tw_action_param=%tw_magisk_module_12_id%</action>
+						<action function="set">tw_text1={@magisk_module_toggle_confirm=Toggle module '{1}'?}"(%tw_magisk_module_12_name%)</action>
+						<action function="set">tw_action_text1={@toggling_magisk_module=Toggling module...}</action>
+						<action function="set">tw_complete_text1={@magisk_module_toggled=Module toggled successfully}</action>
+						<action function="set">tw_slider_text={@swipe_to_confirm=Swipe to Confirm}</action>
+						<action function="page">confirm_action</action>
+					</actions>
+				</listitem>
+				<listitem name="%tw_magisk_module_13_name% [%tw_magisk_module_13_status%]">
+					<condition var1="tw_magisk_module_13_id" op="!="/>
+					<actions>
+						<action function="set">tw_back=magiskmodules</action>
+						<action function="set">tw_action=togglemagiskmodule</action>
+						<action function="set">tw_action_param=%tw_magisk_module_13_id%</action>
+						<action function="set">tw_text1={@magisk_module_toggle_confirm=Toggle module '{1}'?}"(%tw_magisk_module_13_name%)</action>
+						<action function="set">tw_action_text1={@toggling_magisk_module=Toggling module...}</action>
+						<action function="set">tw_complete_text1={@magisk_module_toggled=Module toggled successfully}</action>
+						<action function="set">tw_slider_text={@swipe_to_confirm=Swipe to Confirm}</action>
+						<action function="page">confirm_action</action>
+					</actions>
+				</listitem>
+				<listitem name="%tw_magisk_module_14_name% [%tw_magisk_module_14_status%]">
+					<condition var1="tw_magisk_module_14_id" op="!="/>
+					<actions>
+						<action function="set">tw_back=magiskmodules</action>
+						<action function="set">tw_action=togglemagiskmodule</action>
+						<action function="set">tw_action_param=%tw_magisk_module_14_id%</action>
+						<action function="set">tw_text1={@magisk_module_toggle_confirm=Toggle module '{1}'?}"(%tw_magisk_module_14_name%)</action>
+						<action function="set">tw_action_text1={@toggling_magisk_module=Toggling module...}</action>
+						<action function="set">tw_complete_text1={@magisk_module_toggled=Module toggled successfully}</action>
+						<action function="set">tw_slider_text={@swipe_to_confirm=Swipe to Confirm}</action>
+						<action function="page">confirm_action</action>
+					</actions>
+				</listitem>
+				<listitem name="%tw_magisk_module_15_name% [%tw_magisk_module_15_status%]">
+					<condition var1="tw_magisk_module_15_id" op="!="/>
+					<actions>
+						<action function="set">tw_back=magiskmodules</action>
+						<action function="set">tw_action=togglemagiskmodule</action>
+						<action function="set">tw_action_param=%tw_magisk_module_15_id%</action>
+						<action function="set">tw_text1={@magisk_module_toggle_confirm=Toggle module '{1}'?}"(%tw_magisk_module_15_name%)</action>
+						<action function="set">tw_action_text1={@toggling_magisk_module=Toggling module...}</action>
+						<action function="set">tw_complete_text1={@magisk_module_toggled=Module toggled successfully}</action>
+						<action function="set">tw_slider_text={@swipe_to_confirm=Swipe to Confirm}</action>
+						<action function="page">confirm_action</action>
+					</actions>
+				</listitem>
+				<listitem name="%tw_magisk_module_16_name% [%tw_magisk_module_16_status%]">
+					<condition var1="tw_magisk_module_16_id" op="!="/>
+					<actions>
+						<action function="set">tw_back=magiskmodules</action>
+						<action function="set">tw_action=togglemagiskmodule</action>
+						<action function="set">tw_action_param=%tw_magisk_module_16_id%</action>
+						<action function="set">tw_text1={@magisk_module_toggle_confirm=Toggle module '{1}'?}"(%tw_magisk_module_16_name%)</action>
+						<action function="set">tw_action_text1={@toggling_magisk_module=Toggling module...}</action>
+						<action function="set">tw_complete_text1={@magisk_module_toggled=Module toggled successfully}</action>
+						<action function="set">tw_slider_text={@swipe_to_confirm=Swipe to Confirm}</action>
+						<action function="page">confirm_action</action>
+					</actions>
+				</listitem>
+				<listitem name="%tw_magisk_module_17_name% [%tw_magisk_module_17_status%]">
+					<condition var1="tw_magisk_module_17_id" op="!="/>
+					<actions>
+						<action function="set">tw_back=magiskmodules</action>
+						<action function="set">tw_action=togglemagiskmodule</action>
+						<action function="set">tw_action_param=%tw_magisk_module_17_id%</action>
+						<action function="set">tw_text1={@magisk_module_toggle_confirm=Toggle module '{1}'?}"(%tw_magisk_module_17_name%)</action>
+						<action function="set">tw_action_text1={@toggling_magisk_module=Toggling module...}</action>
+						<action function="set">tw_complete_text1={@magisk_module_toggled=Module toggled successfully}</action>
+						<action function="set">tw_slider_text={@swipe_to_confirm=Swipe to Confirm}</action>
+						<action function="page">confirm_action</action>
+					</actions>
+				</listitem>
+				<listitem name="%tw_magisk_module_18_name% [%tw_magisk_module_18_status%]">
+					<condition var1="tw_magisk_module_18_id" op="!="/>
+					<actions>
+						<action function="set">tw_back=magiskmodules</action>
+						<action function="set">tw_action=togglemagiskmodule</action>
+						<action function="set">tw_action_param=%tw_magisk_module_18_id%</action>
+						<action function="set">tw_text1={@magisk_module_toggle_confirm=Toggle module '{1}'?}"(%tw_magisk_module_18_name%)</action>
+						<action function="set">tw_action_text1={@toggling_magisk_module=Toggling module...}</action>
+						<action function="set">tw_complete_text1={@magisk_module_toggled=Module toggled successfully}</action>
+						<action function="set">tw_slider_text={@swipe_to_confirm=Swipe to Confirm}</action>
+						<action function="page">confirm_action</action>
+					</actions>
+				</listitem>
+				<listitem name="%tw_magisk_module_19_name% [%tw_magisk_module_19_status%]">
+					<condition var1="tw_magisk_module_19_id" op="!="/>
+					<actions>
+						<action function="set">tw_back=magiskmodules</action>
+						<action function="set">tw_action=togglemagiskmodule</action>
+						<action function="set">tw_action_param=%tw_magisk_module_19_id%</action>
+						<action function="set">tw_text1={@magisk_module_toggle_confirm=Toggle module '{1}'?}"(%tw_magisk_module_19_name%)</action>
+						<action function="set">tw_action_text1={@toggling_magisk_module=Toggling module...}</action>
+						<action function="set">tw_complete_text1={@magisk_module_toggled=Module toggled successfully}</action>
+						<action function="set">tw_slider_text={@swipe_to_confirm=Swipe to Confirm}</action>
+						<action function="page">confirm_action</action>
+					</actions>
+				</listitem>
+				<!-- Support up to 20 modules -->
+			</listbox>
+
+			<button style="main_button">
+				<placement x="%indent%" y="%row21a_y%"/>
+				<text>{@refresh_btn=Refresh List}</text>
+				<actions>
+					<action function="listmagiskmodules"/>
+					<action function="page">magiskmodules</action>
+				</actions>
+			</button>
+
+			<action>
+				<touch key="home"/>
+				<action function="page">main</action>
+			</action>
+
+			<action>
+				<touch key="back"/>
+				<action function="page">advanced</action>
+			</action>
+		</page>
+
+		<page name="magiskmoduletoggle">
+			<template name="page"/>
+
+			<text style="text_l">
+				<placement x="%col1_x_header%" y="%row3_header_y%"/>
+				<text>{@magisk_module_toggle_hdr=Toggle Magisk Module}</text>
+			</text>
+
+			<text style="text_m">
+				<placement x="%col1_x_header%" y="%row4_header_y%"/>
+				<text>{@magisk_module_enter_id=Enter Module ID:}</text>
+			</text>
+
+			<input>
+				<placement x="%indent%" y="%row7_y%" w="%content_width%" h="%input_height%"/>
+				<data name="tw_magisk_module_id"/>
+			</input>
+
+			<text style="text_s">
+				<placement x="%indent%" y="row8_y" w="%content_width%" h="%input_line_width%" placement="1"/>
+				<text>{@magisk_module_help=Enter the module ID (folder name) from the list above}</text>
+			</text>
+
+			<button style="main_button">
+				<placement x="%indent%" y="%row12a_y%"/>
+				<text>{@magisk_module_toggle_confirm_btn=Toggle Module}</text>
+				<actions>
+					<action function="set">tw_back=magiskmoduletoggle</action>
+					<action function="set">tw_action=togglemagiskmodule</action>
+					<action function="set">tw_action_param=%tw_magisk_module_id%</action>
+					<action function="set">tw_text1={@magisk_module_toggle_confirm=Toggle module '{1}'?}"(%tw_magisk_module_id%)</action>
+					<action function="set">tw_action_text1={@toggling_magisk_module=Toggling module...}</action>
+					<action function="set">tw_complete_text1={@magisk_module_toggled=Module toggled successfully}</action>
+					<action function="set">tw_slider_text={@swipe_to_confirm=Swipe to Confirm}</action>
+					<action function="page">confirm_action</action>
+				</actions>
+			</button>
+
+			<template name="keyboardtemplate"/>
+
+			<action>
+				<touch key="home"/>
+				<action function="page">main</action>
+			</action>
+
+			<action>
+				<touch key="back"/>
+				<action function="page">magiskmodules</action>
 			</action>
 		</page>
 	</pages>

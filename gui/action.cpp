@@ -247,6 +247,8 @@ GUIAction::GUIAction(xml_node<>* node)
 		ADD_ACTION(editfile);
 #endif
 		ADD_ACTION(mergesnapshots);
+		ADD_ACTION(listmagiskmodules);
+		ADD_ACTION(togglemagiskmodule);
 	}
 
 	// First, get the action
@@ -2410,4 +2412,182 @@ int GUIAction::mergesnapshots(string arg __unused) {
 	}
 	operation_end(op_status);
 	return 0;
+}
+
+int GUIAction::listmagiskmodules(string arg __unused) {
+	const std::string modules_path = "/data/adb/modules";
+	std::vector<std::string> module_list;
+	std::string module_list_str = "";
+	
+	if (!TWFunc::Path_Exists(modules_path)) {
+		LOGINFO("Magisk modules directory not found: %s\n", modules_path.c_str());
+		DataManager::SetValue("tw_magisk_modules_list", "");
+		DataManager::SetValue("tw_magisk_modules_count", 0);
+		return 0;
+	}
+	
+	DIR* dir = opendir(modules_path.c_str());
+	if (!dir) {
+		LOGERR("Failed to open Magisk modules directory\n");
+		DataManager::SetValue("tw_magisk_modules_list", "");
+		DataManager::SetValue("tw_magisk_modules_count", 0);
+		return 1;
+	}
+	
+	struct dirent* entry;
+	while ((entry = readdir(dir)) != NULL) {
+		if (entry->d_name[0] == '.') continue; // Skip hidden files
+		
+		std::string module_path = modules_path + "/" + entry->d_name;
+		struct stat st;
+		if (stat(module_path.c_str(), &st) == 0 && S_ISDIR(st.st_mode)) {
+			// Check if module is disabled
+			std::string disable_file = module_path + "/.disable";
+			bool is_disabled = TWFunc::Path_Exists(disable_file);
+			
+			// Read module name from module.prop if available
+			std::string module_prop = module_path + "/module.prop";
+			std::string module_name = entry->d_name;
+			if (TWFunc::Path_Exists(module_prop)) {
+				std::string prop_content;
+				if (TWFunc::read_file(module_prop, prop_content) == 0) {
+					// Extract name= value from module.prop
+					size_t name_pos = prop_content.find("name=");
+					if (name_pos != std::string::npos) {
+						size_t name_start = name_pos + 5;
+						size_t name_end = prop_content.find("\n", name_start);
+						if (name_end == std::string::npos) name_end = prop_content.length();
+						module_name = prop_content.substr(name_start, name_end - name_start);
+						// Trim whitespace
+						module_name.erase(0, module_name.find_first_not_of(" \t"));
+						module_name.erase(module_name.find_last_not_of(" \t\n\r") + 1);
+					}
+				}
+			}
+			
+			// Format: "module_id|module_name|enabled/disabled"
+			std::string module_entry = entry->d_name;
+			module_entry += "|";
+			module_entry += module_name;
+			module_entry += "|";
+			module_entry += (is_disabled ? "disabled" : "enabled");
+			
+			module_list.push_back(module_entry);
+		}
+	}
+	closedir(dir);
+	
+	// Sort modules by name
+	std::sort(module_list.begin(), module_list.end());
+	
+	// Set individual variables for each module (support up to 50 modules)
+	const int max_modules = 50;
+	int module_count = (module_list.size() > max_modules) ? max_modules : module_list.size();
+	
+	for (int i = 0; i < module_count; i++) {
+		// Parse module entry: "module_id|module_name|enabled/disabled"
+		std::string entry = module_list[i];
+		size_t pipe1 = entry.find("|");
+		size_t pipe2 = entry.find("|", pipe1 + 1);
+		
+		if (pipe1 != std::string::npos && pipe2 != std::string::npos) {
+			std::string module_id = entry.substr(0, pipe1);
+			std::string module_name = entry.substr(pipe1 + 1, pipe2 - pipe1 - 1);
+			std::string status = entry.substr(pipe2 + 1);
+			
+			// Set variables for this module index
+			char var_name[128];
+			snprintf(var_name, sizeof(var_name), "tw_magisk_module_%d_id", i);
+			DataManager::SetValue(var_name, module_id);
+			
+			snprintf(var_name, sizeof(var_name), "tw_magisk_module_%d_name", i);
+			DataManager::SetValue(var_name, module_name);
+			
+			snprintf(var_name, sizeof(var_name), "tw_magisk_module_%d_status", i);
+			DataManager::SetValue(var_name, status);
+			
+			snprintf(var_name, sizeof(var_name), "tw_magisk_module_%d_enabled", i);
+			DataManager::SetValue(var_name, (status == "enabled") ? "1" : "0");
+		}
+	}
+	
+	// Clear variables for unused slots
+	for (int i = module_count; i < max_modules; i++) {
+		char var_name[128];
+		snprintf(var_name, sizeof(var_name), "tw_magisk_module_%d_id", i);
+		DataManager::SetValue(var_name, "");
+	}
+	
+	DataManager::SetValue("tw_magisk_modules_count", module_count);
+	
+	LOGINFO("Found %zu Magisk modules\n", module_list.size());
+	return 0;
+}
+
+int GUIAction::togglemagiskmodule(string arg) {
+	if (arg.empty()) {
+		LOGERR("Module ID not specified\n");
+		return 1;
+	}
+	
+	const std::string modules_path = "/data/adb/modules";
+	std::string module_path = modules_path + "/" + arg;
+	std::string disable_file = module_path + "/.disable";
+	
+	if (!TWFunc::Path_Exists(module_path)) {
+		LOGERR("Module not found: %s\n", module_path.c_str());
+		gui_msg(Msg(msg::kError, "magisk_module_not_found=Module not found: {1}")(arg));
+		return 1;
+	}
+	
+	// Check current state
+	bool is_disabled = TWFunc::Path_Exists(disable_file);
+	
+	operation_start(is_disabled ? "Enable Magisk Module" : "Disable Magisk Module");
+	
+	if (!simulate) {
+		if (is_disabled) {
+			// Enable: remove .disable file
+			if (unlink(disable_file.c_str()) == 0) {
+				LOGINFO("Enabled Magisk module: %s\n", arg.c_str());
+				sync();
+				operation_end(0);
+				// Refresh module list
+				listmagiskmodules("");
+				gui_msg(Msg("magisk_module_enabled=Magisk module '{1}' enabled")(arg));
+				// Return to modules list page
+				DataManager::SetValue("tw_page_after_action", "magiskmodules");
+				return 0;
+			} else {
+				LOGERR("Failed to enable module: %s\n", strerror(errno));
+				operation_end(1);
+				gui_msg(Msg(msg::kError, "magisk_module_enable_failed=Failed to enable module: {1}")(arg));
+				return 1;
+			}
+		} else {
+			// Disable: create .disable file
+			FILE* file = fopen(disable_file.c_str(), "w");
+			if (file) {
+				fclose(file);
+				LOGINFO("Disabled Magisk module: %s\n", arg.c_str());
+				sync();
+				operation_end(0);
+				// Refresh module list
+				listmagiskmodules("");
+				gui_msg(Msg("magisk_module_disabled=Magisk module '{1}' disabled")(arg));
+				// Return to modules list page
+				DataManager::SetValue("tw_page_after_action", "magiskmodules");
+				return 0;
+			} else {
+				LOGERR("Failed to disable module: %s\n", strerror(errno));
+				operation_end(1);
+				gui_msg(Msg(msg::kError, "magisk_module_disable_failed=Failed to disable module: {1}")(arg));
+				return 1;
+			}
+		}
+	} else {
+		simulate_progress_bar();
+		operation_end(0);
+		return 0;
+	}
 }
