@@ -40,17 +40,20 @@ public:
 	static inline std::string const SIDELOAD = "--sideload";
 	static inline std::string const REASON = "--reason";
 	static inline std::string const FASTBOOT = "--fastboot";
+	static inline std::string const ADB = "--adb";
 	static inline std::string const NANDROID = "--nandroid";
 	static inline std::string const RESCUE_PARTY = "--prompt_and_wipe_data";
 	void parse(int *argc, char ***argv);
 	bool Should_Skip_Decryption();
 	std::string Get_Intent();
 	bool Get_Fastboot_Mode();
+	bool Get_Adb_Mode();
 	bool processRecoveryArgs(std::vector<std::string> args, int index);
 
 private:
 	bool SkipDecryption = false;
 	bool fastboot_mode = false;
+	bool adb_mode = false;
 	std::string Send_Intent;
 };
 #endif

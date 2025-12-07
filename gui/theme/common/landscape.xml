@@ -2925,6 +2925,21 @@
 						<action function="page">confirm_action</action>
 					</actions>
 				</listitem>
+
+				<listitem name="{@rb_adb_btn=ADB}">
+					<condition var1="tw_adb_mode" var2="1"/>
+					<actions>
+						<action function="set">tw_back=fastbootreboot</action>
+						<action function="set">tw_action=reboot</action>
+						<action function="set">tw_action_param=adb</action>
+						<action function="set">tw_reboot_param=adb</action>
+						<action function="set">tw_has_action2=0</action>
+						<action function="set">tw_action_text1={@rebooting=Rebooting...}</action>
+						<action function="set">tw_complete_text1={@rebooting=Rebooting...}</action>
+						<action function="set">tw_slider_text={@swipe_reboot=Swipe to Reboot}</action>
+						<action function="page">confirm_action</action>
+					</actions>
+				</listitem>
 			</listbox>
 			<action>
 				<touch key="home"/>
@@ -3049,6 +3064,23 @@
 						<action function="set">tw_action=reboot</action>
 						<action function="set">tw_action_param=edl</action>
 						<action function="set">tw_reboot_param=edl</action>
+						<action function="set">tw_has_action2=0</action>
+						<action function="set">tw_text1={@no_os1=No OS Installed! Are you}</action>
+						<action function="set">tw_text2={@no_osrb=sure you wish to reboot?}</action>
+						<action function="set">tw_action_text1={@rebooting=Rebooting...}</action>
+						<action function="set">tw_complete_text1={@rebooting=Rebooting...}</action>
+						<action function="set">tw_slider_text={@swipe_reboot=Swipe to Reboot}</action>
+						<action function="page">rebootcheck</action>
+					</actions>
+				</listitem>
+
+				<listitem name="{@rb_adb_btn=ADB}">
+					<condition var1="tw_adb_mode" var2="1"/>
+					<actions>
+						<action function="set">tw_back=reboot</action>
+						<action function="set">tw_action=reboot</action>
+						<action function="set">tw_action_param=adb</action>
+						<action function="set">tw_reboot_param=adb</action>
 						<action function="set">tw_has_action2=0</action>
 						<action function="set">tw_text1={@no_os1=No OS Installed! Are you}</action>
 						<action function="set">tw_text2={@no_osrb=sure you wish to reboot?}</action>

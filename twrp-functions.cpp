@@ -663,6 +663,18 @@ int TWFunc::tw_reboot(RebootCommand command)
 			return property_set(ANDROID_RB_PROPERTY, "reboot,edl");
 		case rb_fastboot:
 			return property_set(ANDROID_RB_PROPERTY, "reboot,fastboot");
+		case rb_adb:
+			check_and_run_script("/system/bin/rebootadb.sh", "reboot adb");
+			// Write bootloader message to boot into recovery with --adb argument
+			{
+				std::string err;
+				std::vector<std::string> options = { "--adb" };
+				if (!write_bootloader_message(options, &err)) {
+					LOGERR("Failed to write bootloader message: %s\n", err.c_str());
+					return -1;
+				}
+			}
+			return property_set(ANDROID_RB_PROPERTY, "reboot,recovery");
 		default:
 			return -1;
 	}

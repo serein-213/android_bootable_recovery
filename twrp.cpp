@@ -134,6 +134,26 @@ static void process_fastbootd_mode() {
 		}
 }
 
+static void process_adb_mode() {
+	LOGINFO("starting ADB mode\n");
+
+	// Enable ADB
+	android::base::SetProperty("sys.usb.config", "none");
+	android::base::SetProperty("sys.usb.config", "adb");
+	
+	// Set DataManager values
+	DataManager::SetValue("tw_enable_adb", 1);
+	DataManager::SetValue("tw_enable_fastboot", 0);
+
+	gui_msg(Msg("adb_console_msg=Entered ADB mode..."));
+	// Check for and run startup script if script exists
+	TWFunc::check_and_run_script("/system/bin/runatboot.sh", "boot");
+	TWFunc::check_and_run_script("/system/bin/postadb.sh", "adb");
+	if (gui_startPage("adb", 1, 1) != 0) {
+		LOGERR("Failed to start ADB page.\n");
+	}
+}
+
 static void process_recovery_mode(twrpAdbBuFifo* adb_bu_fifo, bool skip_decryption) {
 	char crash_prop_val[PROPERTY_VALUE_MAX];
 	int crash_counter;
@@ -364,6 +384,8 @@ static void reboot() {
 		TWFunc::tw_reboot(rb_edl);
 	else if (Reboot_Arg == "fastboot")
 		TWFunc::tw_reboot(rb_fastboot);
+	else if (Reboot_Arg == "adb")
+		TWFunc::tw_reboot(rb_adb);
 	else
 		TWFunc::tw_reboot(rb_system);
 }
@@ -423,6 +445,12 @@ int main(int argc, char **argv) {
 
 	if (startup.Get_Fastboot_Mode()) {
 		process_fastbootd_mode();
+		delete adb_bu_fifo;
+		TWFunc::Update_Intent_File(startup.Get_Intent());
+		reboot();
+		return 0;
+	} else if (startup.Get_Adb_Mode()) {
+		process_adb_mode();
 		delete adb_bu_fifo;
 		TWFunc::Update_Intent_File(startup.Get_Intent());
 		reboot();

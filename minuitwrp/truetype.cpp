@@ -359,7 +359,11 @@ int twrpTruetype::gr_ttf_render_text(TrueTypeFont *font, GGLSurface *surface, co
 		ent = gr_ttf_glyph_cache_get(f, char_idx);
 		if(ent)
 		{
-			diff = ent->glyph->root.advance.x >> 16;
+			// Use the maximum of advance.x and actual glyph width to prevent character overlap
+			// This fixes issues where glyphs like 'O' have a wider bitmap than their advance
+			int advance_x = ent->glyph->root.advance.x >> 16;
+			int actual_width = ent->glyph->left + ent->glyph->bitmap.width;
+			diff = std::max(advance_x, actual_width);
 
 			if(FT_HAS_KERNING(f->face) && prev_idx && char_idx)
 			{
@@ -411,7 +415,11 @@ int twrpTruetype::gr_ttf_render_text(TrueTypeFont *font, GGLSurface *surface, co
 		if(ent)
 		{
 			gr_ttf_copy_glyph_to_surface(surface, ent->glyph, x, 0, font->base);
-			x += ent->glyph->root.advance.x >> 16;
+			// Use the maximum of advance.x and actual glyph width to prevent character overlap
+			// This fixes issues where glyphs like 'O' have a wider bitmap than their advance
+			int advance_x = ent->glyph->root.advance.x >> 16;
+			int actual_width = ent->glyph->left + ent->glyph->bitmap.width;
+			x += std::max(advance_x, actual_width);
 		}
 
 		prev_idx = char_idx;
@@ -539,7 +547,11 @@ int twrpTruetype::gr_ttf_maxExW(const char *s, void *font, int max_width) {
 		if(!ent)
 			continue;
 
-		total_w += ent->glyph->root.advance.x >> 16;
+		// Use the maximum of advance.x and actual glyph width to prevent character overlap
+		// This fixes issues where glyphs like 'O' have a wider bitmap than their advance
+		int advance_x = ent->glyph->root.advance.x >> 16;
+		int actual_width = ent->glyph->left + ent->glyph->bitmap.width;
+		total_w += std::max(advance_x, actual_width);
 		max_bytes += utf_bytes;
 	}
 	pthread_mutex_unlock(&f->mutex);

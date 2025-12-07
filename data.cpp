@@ -723,6 +723,10 @@ void DataManager::SetDefaultValues()
 	printf("TW_INCLUDE_FASTBOOTD := true\n");
 	mConst.SetValue(TW_FASTBOOT_MODE, "1");
 #endif
+	// ADB mode is available on most devices in recovery
+	mConst.SetValue(TW_ADB_MODE, "1");
+	// Fastboot mode is available on most devices
+	mConst.SetValue(TW_FASTBOOT_MODE, "1");
 #ifdef PRODUCT_USE_DYNAMIC_PARTITIONS
 	printf("PRODUCT_USE_DYNAMIC_PARTITIONS := true\n");
 	mConst.SetValue(TW_FASTBOOT_MODE, "1");

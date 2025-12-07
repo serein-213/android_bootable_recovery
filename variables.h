@@ -135,6 +135,7 @@
 #define TW_DOWNLOAD_MODE            "tw_download_mode"
 #define TW_EDL_MODE                 "tw_edl_mode"
 #define TW_FASTBOOT_MODE            "tw_fastboot_mode"
+#define TW_ADB_MODE                 "tw_adb_mode"
 #define TW_IS_ENCRYPTED             "tw_is_encrypted"
 #define TW_IS_DECRYPTED             "tw_is_decrypted"
 #define TW_CRYPTO_PWTYPE            "tw_crypto_pwtype"

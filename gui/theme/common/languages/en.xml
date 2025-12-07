@@ -294,6 +294,7 @@
 		<string name="rb_bootloader_btn">Bootloader</string>
 		<string name="rb_download_btn">Download</string>
 		<string name="rb_edl_btn">EDL</string>
+		<string name="rb_adb_btn">ADB</string>
 		<string name="turning_off">Turning Off...</string>
 		<string name="swipe_power_off">Swipe to Power Off</string>
 		<string name="swipe_power_off_s">Power Off</string>
@@ -780,6 +781,7 @@
 		<string name="enable_adb">Enable ADB</string>
 		<string name="enable_fastboot">Enable Fastboot</string>
 		<string name="fastboot_console_msg">Entered Fastboot mode...</string>
+		<string name="adb_console_msg">Entered ADB mode...</string>
 		<string name="data_media_fbe_msg">TWRP will not recreate /data/media on an FBE device. Please reboot into your rom to create /data/media</string>
 		<!-- Android Rescue Party trigger -->
 		<string name="rescue_party0">Android Rescue Party trigger! Possible solutions? Either:</string>
