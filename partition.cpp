@@ -1537,6 +1537,46 @@ bool TWPartition::Mount(bool Display_Error) {
 	int exfat_mounted = 0;
 	unsigned int flags = Mount_Flags;
 
+	// For USB OTG, enable host mode only when user actually tries to mount it
+	// Support both /usb-otg and /usb_otg mount point names
+	if (Mount_Point == "/usb-otg" || Mount_Point == "/usb_otg") {
+		const std::string otg_switch_path = "/sys/class/power_supply/usb/otg_switch";
+		if (TWFunc::Path_Exists(otg_switch_path)) {
+			LOGINFO("Enabling OTG host mode for %s\n", Mount_Point.c_str());
+			if (TWFunc::write_to_file(otg_switch_path, "1")) {
+				LOGINFO("OTG switch enabled successfully\n");
+				// Wait for USB devices to enumerate (kernel needs time to detect USB device)
+				// Retry up to 3 times with increasing delays
+				bool device_found = false;
+				for (int retry = 0; retry < 3 && !device_found; retry++) {
+					usleep(500000 + retry * 300000); // 500ms, 800ms, 1100ms delays
+					// Force refresh block device list
+					Find_Actual_Block_Device();
+					// Check if device is now present
+					if (!Actual_Block_Device.empty() && TWFunc::Path_Exists(Actual_Block_Device)) {
+						device_found = true;
+						LOGINFO("USB device found after %d retry(ies): %s\n", retry, Actual_Block_Device.c_str());
+					} else {
+						LOGINFO("USB device not found yet, retry %d/3\n", retry + 1);
+					}
+				}
+				if (!device_found) {
+					LOGINFO("USB device not found after enabling OTG, will continue with mount attempt\n");
+				}
+			} else {
+				LOGERR("Failed to enable OTG switch\n");
+				if (Display_Error) {
+					gui_msg(Msg(msg::kError, "otg_enable_failed=Failed to enable OTG host mode"));
+				}
+			}
+		} else {
+			LOGERR("OTG switch path %s not found\n", otg_switch_path.c_str());
+			if (Display_Error) {
+				gui_msg(Msg(msg::kError, "otg_switch_not_found=OTG switch not found on this device"));
+			}
+		}
+	}
+
 	if (Is_Mounted()) {
 		return true;
 	} else if (!Can_Be_Mounted) {
@@ -1699,6 +1739,21 @@ bool TWPartition::UnMount(bool Display_Error) {
 			umount(Symlink_Mount_Point.c_str());
 
 		umount(Mount_Point.c_str());
+
+		// For USB OTG, when unmounting switch back to non-host (charging) mode
+		// Support both /usb-otg and /usb_otg mount point names
+		if (Mount_Point == "/usb-otg" || Mount_Point == "/usb_otg") {
+			const std::string otg_switch_path = "/sys/class/power_supply/usb/otg_switch";
+			if (TWFunc::Path_Exists(otg_switch_path)) {
+				LOGINFO("Disabling OTG host mode for %s\n", Mount_Point.c_str());
+				if (TWFunc::write_to_file(otg_switch_path, "0")) {
+					LOGINFO("OTG switch disabled successfully (charging mode)\n");
+				} else {
+					LOGERR("Failed to disable OTG switch\n");
+				}
+			}
+		}
+
 		if (Is_Mounted()) {
 			if (Display_Error)
 				gui_msg(Msg(msg::kError, "fail_unmount=Failed to unmount '{1}' ({2})")(Mount_Point)(strerror(errno)));

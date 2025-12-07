@@ -3879,6 +3879,9 @@
 				<listitem name="{@reload_theme_btn=Reload Theme}">
 					<action function="reload"/>
 				</listitem>
+				<listitem name="{@toggle_otg_btn=Toggle OTG Switch}">
+					<action function="toggleotgswitch"/>
+				</listitem>
 				<listitem name="{@part_sd_btn=Partition SD Card}">
 					<condition var1="tw_allow_partition_sdcard" var2="1"/>
 					<actions>

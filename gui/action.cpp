@@ -204,6 +204,7 @@ GUIAction::GUIAction(xml_node<>* node)
 		ADD_ACTION(setlanguage);
 		ADD_ACTION(checkforapp);
 		ADD_ACTION(togglebacklight);
+		ADD_ACTION(toggleotgswitch);
 		ADD_ACTION(enableadb);
 		ADD_ACTION(enablefastboot);
 		ADD_ACTION(changeterminal);
@@ -1936,6 +1937,55 @@ int GUIAction::togglebacklight(std::string arg __unused)
 {
 	blankTimer.toggleBlank();
 	return 0;
+}
+
+int GUIAction::toggleotgswitch(std::string arg __unused)
+{
+	const std::string otg_switch_path = "/sys/class/power_supply/usb/otg_switch";
+	
+	if (!TWFunc::Path_Exists(otg_switch_path)) {
+		LOGERR("OTG switch path %s not found\n", otg_switch_path.c_str());
+		gui_msg(Msg(msg::kError, "otg_switch_not_found=OTG switch not found on this device"));
+		return 1;
+	}
+	
+	// Read current state
+	std::string current_value;
+	if (TWFunc::read_file(otg_switch_path, current_value) == 0) {
+		// Trim whitespace
+		current_value.erase(0, current_value.find_first_not_of(" \t\n\r"));
+		current_value.erase(current_value.find_last_not_of(" \t\n\r") + 1);
+		
+		// Toggle: if 1, set to 0; if 0 or empty, set to 1
+		std::string new_value = (current_value == "1") ? "0" : "1";
+		
+		if (TWFunc::write_to_file(otg_switch_path, new_value)) {
+			LOGINFO("OTG switch toggled: %s -> %s\n", current_value.c_str(), new_value.c_str());
+			
+			// Wait a bit for USB devices to enumerate if enabling OTG
+			if (new_value == "1") {
+				usleep(500000); // 500ms delay for USB enumeration
+			}
+			
+			// Refresh partition list to detect new USB devices
+			PartitionManager.Update_System_Details();
+			
+			if (new_value == "1") {
+				gui_msg("otg_enabled=OTG Host Mode Enabled");
+			} else {
+				gui_msg("otg_disabled=OTG Host Mode Disabled (Charging Mode)");
+			}
+			return 0;
+		} else {
+			LOGERR("Failed to write to OTG switch\n");
+			gui_msg(Msg(msg::kError, "otg_switch_failed=Failed to toggle OTG switch"));
+			return 1;
+		}
+	} else {
+		LOGERR("Failed to read OTG switch state\n");
+		gui_msg(Msg(msg::kError, "otg_switch_read_failed=Failed to read OTG switch state"));
+		return 1;
+	}
 }
 
 int GUIAction::setbootslot(std::string arg)

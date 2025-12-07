@@ -399,6 +399,13 @@
 		<string name="language_hdr">语言</string>
 		<string name="terminal_btn">终端命令</string>
 		<string name="reload_theme_btn">重载主题</string>
+		<string name="toggle_otg_btn">切换 OTG 开关</string>
+		<string name="otg_enabled">OTG 主机模式已启用</string>
+		<string name="otg_disabled">OTG 主机模式已禁用（充电模式）</string>
+		<string name="otg_switch_not_found">此设备未找到 OTG 开关</string>
+		<string name="otg_enable_failed">启用 OTG 主机模式失败</string>
+		<string name="otg_switch_failed">切换 OTG 开关失败</string>
+		<string name="otg_switch_read_failed">读取 OTG 开关状态失败</string>
 		<string name="dumlock_btn">HTC Dumlock</string>
 		<string name="inject_twrp_btn">注入 TWRP</string>
 		<string name="inject_twrp_confirm">是否重新注入 TWRP？</string>

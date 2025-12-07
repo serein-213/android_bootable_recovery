@@ -367,6 +367,7 @@ protected:
 	int mountsystemtoggle(std::string arg);
 	int setlanguage(std::string arg);
 	int togglebacklight(std::string arg);
+	int toggleotgswitch(std::string arg);
 	int twcmd(std::string arg);
 	int setbootslot(std::string arg);
 	int installapp(std::string arg);

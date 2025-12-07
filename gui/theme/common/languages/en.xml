@@ -399,6 +399,13 @@
 		<string name="language_hdr">Language</string>
 		<string name="terminal_btn">Terminal</string>
 		<string name="reload_theme_btn">Reload Theme</string>
+		<string name="toggle_otg_btn">Toggle OTG Switch</string>
+		<string name="otg_enabled">OTG Host Mode Enabled</string>
+		<string name="otg_disabled">OTG Host Mode Disabled (Charging Mode)</string>
+		<string name="otg_switch_not_found">OTG switch not found on this device</string>
+		<string name="otg_enable_failed">Failed to enable OTG host mode</string>
+		<string name="otg_switch_failed">Failed to toggle OTG switch</string>
+		<string name="otg_switch_read_failed">Failed to read OTG switch state</string>
 		<string name="dumlock_btn">HTC Dumlock</string>
 		<string name="inject_twrp_btn">Inject TWRP</string>
 		<string name="inject_twrp_confirm">Re-Inject TWRP?</string>
